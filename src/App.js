@@ -1,26 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Task from './Components/Task';
+
+class App extends Component {
+
+  state = {
+    list : [
+      {
+        id: 1,
+        todo: 'Buy Milk'
+      }, 
+      {
+        id: 2,
+        todo: 'Pick up mail'
+      },
+      {
+        id: 3,
+        todo: 'Walk the dog'
+      }
+    ],
+    taskInput: ''
+  }
+
+  showTaskFunc = () => {
+    return this.state.list.map((task, index) => {
+      return (
+        <div key={index}>
+          {task.todo}
+        </div>
+      )
+    })
+  } 
+
+  handleInput = (event) => {
+    console.log(`name: ${event.target.name} || value ${event.target.value}`)
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  render() {
+
+    return (
+      <div className="App">
+
+          <div>
+            <form>
+              <input onChange={this.handleInput} name="taskInput" />
+              <button>Submit</button>
+            </form>
+            
+          </div>
+
+          {this.showTaskFunc()}
+
+      </div>
+    )
+  }
+
+
 }
 
 export default App;
