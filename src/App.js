@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import uuidV4 from 'uuid/v4';
+
 import './App.css';
 
 import Task from './Components/Task';
@@ -8,15 +10,15 @@ class App extends Component {
   state = {
     list : [
       {
-        id: 1,
+        id: uuidV4(),
         todo: 'Buy Milk'
       }, 
       {
-        id: 2,
+        id: uuidV4(),
         todo: 'Pick up mail'
       },
       {
-        id: 3,
+        id: uuidV4(),
         todo: 'Walk the dog'
       }
     ],
@@ -24,9 +26,9 @@ class App extends Component {
   }
 
   showTaskFunc = () => {
-    return this.state.list.map((task, index) => {
+    return this.state.list.map((task) => {
       return (
-        <div key={index}>
+        <div key={task.id}>
           {task.todo}
         </div>
       )
@@ -40,15 +42,51 @@ class App extends Component {
     })
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    let newTask = {
+      todo: this.state.taskInput,
+      id: uuidV4()
+    }
+
+    let currentTaskObj = Object.assign([], this.state.list);
+
+    currentTaskObj.push(newTask);
+
+    // this.setState({
+    //   list: currentTaskObj,
+    //   taskInput: ''
+    // })
+
+    this.setState({
+      list: currentTaskObj
+    })
+
+    this.form.reset();
+
+  }
+
   render() {
 
     return (
       <div className="App">
 
           <div>
-            <form>
-              <input onChange={this.handleInput} name="taskInput" />
+            <form onSubmit={this.handleSubmit} ref={(element) => this.form = element } >
+
+              {/* <input 
+                onChange={this.handleInput} 
+                name="taskInput" 
+                value={this.state.taskInput} 
+                /> */}
+
+              <input 
+                onChange={this.handleInput} 
+                name="taskInput" 
+                />
               <button>Submit</button>
+
             </form>
             
           </div>
