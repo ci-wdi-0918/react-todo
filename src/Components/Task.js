@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TaskList from './TaskList';
 
 class Task extends Component {
 
@@ -10,14 +11,16 @@ class Task extends Component {
     showTaskList = () => {
         return this.props.list.map((task) => {
             return (
-              <div key={task.id} style={{marginBottom: '10px'}}>
-                {task.todo} <button onClick={this.taskHandleDeleteByID.bind(this, task.id)}>Delete</button>
-              </div>
+                <TaskList 
+                    key={task.id}
+                    task={task}
+                    taskHandleDeleteByIDProps={this.taskHandleDeleteByID}
+                />
             )
           })
     }
 
-    taskHandleDeleteByID = (taskID, event) => {
+    taskHandleDeleteByID = (taskID) => {
         this.props.appHandleDeleteByID(taskID);
     }
 
