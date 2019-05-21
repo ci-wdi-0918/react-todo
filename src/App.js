@@ -25,19 +25,27 @@ class App extends Component {
   }
 
   handleSubmit = (value) => {
-    
     let newTask = {
       todo: value,
       id: uuidV4()
     }
-
     let currentTaskObj = Object.assign([], this.state.list);
-
     currentTaskObj.push(newTask);
 
     this.setState({
       list: currentTaskObj
     })
+  }
+
+  handleDelete = (taskID) => {
+    
+    let updated = [...this.state.list];
+
+    let updatedTask = updated.filter(task => task.id !== taskID);
+
+    this.setState({
+      list: updatedTask
+    });
 
   }
 
@@ -48,6 +56,7 @@ class App extends Component {
         <Task 
           {...this.state}
           appHandleSubmit={this.handleSubmit}
+          appHandleDeleteByID={this.handleDelete}
         />
       </div>
     )

@@ -6,19 +6,24 @@ class Task extends Component {
         taskInput: ''
     }
 
+
     showTaskList = () => {
         return this.props.list.map((task) => {
             return (
               <div key={task.id} style={{marginBottom: '10px'}}>
-                {task.todo} <button>Delete</button>
+                {task.todo} <button onClick={this.taskHandleDeleteByID.bind(this, task.id)}>Delete</button>
               </div>
             )
           })
-        
+    }
+
+    taskHandleDeleteByID = (taskID, event) => {
+        this.props.appHandleDeleteByID(taskID);
     }
 
     taskHandleInput = (event) => {
         //console.log(`name: ${event.target.name} || value ${event.target.value}`)
+        //<button onClick={() => this.taskHandleDeleteByID(task.id)}>Delete</button>
         this.setState({
           [event.target.name]: event.target.value
         })
@@ -31,7 +36,6 @@ class Task extends Component {
         this.form.reset();
     }
 
-    
     render() {
         return (
             <div>
