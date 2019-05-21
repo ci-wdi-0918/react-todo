@@ -21,32 +21,13 @@ class App extends Component {
         id: uuidV4(),
         todo: 'Walk the dog'
       }
-    ],
-    taskInput: ''
+    ]
   }
 
-  showTaskFunc = () => {
-    return this.state.list.map((task) => {
-      return (
-        <div key={task.id}>
-          {task.todo}
-        </div>
-      )
-    })
-  } 
-
-  handleInput = (event) => {
-    //console.log(`name: ${event.target.name} || value ${event.target.value}`)
-    this.setState({
-      [event.target.name]: event.target.value
-    })
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
+  handleSubmit = (value) => {
+    
     let newTask = {
-      todo: this.state.taskInput,
+      todo: value,
       id: uuidV4()
     }
 
@@ -58,8 +39,6 @@ class App extends Component {
       list: currentTaskObj
     })
 
-    this.form.reset();
-
   }
 
   render() {
@@ -68,6 +47,7 @@ class App extends Component {
       <div className="App">
         <Task 
           {...this.state}
+          appHandleSubmit={this.handleSubmit}
         />
       </div>
     )
@@ -78,26 +58,3 @@ class App extends Component {
 
 export default App;
 
-/*
-
-
-   <div className="App">
-
-          <div>
-            <form onSubmit={this.handleSubmit} ref={(element) => this.form = element } >
-
-        
-                <input 
-                onChange={this.handleInput} 
-                name="taskInput" 
-                />
-              <button>Submit</button>
-
-            </form>
-            
-          </div>
-
-          {this.showTaskFunc()}
-
-      </div>
-*/
