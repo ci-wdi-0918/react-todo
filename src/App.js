@@ -36,7 +36,7 @@ class App extends Component {
   } 
 
   handleInput = (event) => {
-    console.log(`name: ${event.target.name} || value ${event.target.value}`)
+    //console.log(`name: ${event.target.name} || value ${event.target.value}`)
     this.setState({
       [event.target.name]: event.target.value
     })
@@ -54,11 +54,6 @@ class App extends Component {
 
     currentTaskObj.push(newTask);
 
-    // this.setState({
-    //   list: currentTaskObj,
-    //   taskInput: ''
-    // })
-
     this.setState({
       list: currentTaskObj
     })
@@ -71,17 +66,28 @@ class App extends Component {
 
     return (
       <div className="App">
+        <Task 
+          {...this.state}
+        />
+      </div>
+    )
+  }
+
+
+}
+
+export default App;
+
+/*
+
+
+   <div className="App">
 
           <div>
             <form onSubmit={this.handleSubmit} ref={(element) => this.form = element } >
 
-              {/* <input 
-                onChange={this.handleInput} 
-                name="taskInput" 
-                value={this.state.taskInput} 
-                /> */}
-
-              <input 
+        
+                <input 
                 onChange={this.handleInput} 
                 name="taskInput" 
                 />
@@ -94,10 +100,4 @@ class App extends Component {
           {this.showTaskFunc()}
 
       </div>
-    )
-  }
-
-
-}
-
-export default App;
+*/
