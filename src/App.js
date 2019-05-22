@@ -25,7 +25,9 @@ class App extends Component {
       }
     ],
     isAuth: false,
-    password: '123'
+    password: '123',
+    message: 'Please sign up to use the best Todo Manager System!',
+    user: null
   }
 
   handleSubmit = (value) => {
@@ -61,12 +63,32 @@ class App extends Component {
 
   }
 
+  handleAuth = (userInfo) => {
+    //console.log('APP 65', userInfo);
+
+    const { name, password } = userInfo;
+
+    if(password === this.state.password) {
+      this.setState({
+        isAuth: !this.state.isAuth,
+        user: name
+      })
+    } else {
+      this.setState({
+        message: 'Password does not match! Please check your password'
+      })
+    }
+
+  }
 
   render() {
 
     return (
       <div className="App">
-        <Nav />
+        <Nav 
+          appAuthFunc={this.handleAuth}
+          user={this.state.user}
+        />
         {
           this.state.isAuth ? (
             <Task 
@@ -75,7 +97,7 @@ class App extends Component {
               appHandleDeleteByID={this.handleDelete}
               appHandleEditInputUpdate={this.handleEditInputUpdate}
             />
-          ) : 'Please sign up to use the best Todo Manager System!'
+          ) : this.state.message
         }
       </div>
     )
