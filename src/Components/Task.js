@@ -15,6 +15,7 @@ class Task extends Component {
                     key={task.id}
                     task={task}
                     taskHandleDeleteByIDProps={this.taskHandleDeleteByID}
+                    taskHandleEditInput={this.props.appHandleEditInputUpdate}
                 />
             )
           })

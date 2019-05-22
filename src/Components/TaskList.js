@@ -3,30 +3,59 @@ import React, { Component } from 'react'
 class TaskList extends Component {
 
   state = {
-      isToggle: false
+      isToggle: false,
+      newInput: ''
   }  
 
   taskListHandleDeleteByID = (id) => {
       this.props.taskHandleDeleteByIDProps(id)
   }
 
-  taskListHandleEdit = () => {
+  taskListHandleToggle = (id) => {
 
+
+    this.setState({
+        isToggle: !this.state.isToggle
+    }, () => {
+        
+        
+        if (this.props.task.todo === this.state.newInput) {
+            return;
+        } else {
+            this.props.taskHandleEditInput(id, this.state.newInput)
+        }
+
+    })
+  }
+
+  taskListHandleEdit = (event) => {
+  
+    this.setState({
+        newInput: event.target.value
+    })
+
+  }
+
+  componentDidMount() {
+      this.setState({
+          newInput: this.props.task.todo
+      })
   }
 
   render() {
 
+
     const { todo, id } = this.props.task;
-    const { isToggle } = this.state; 
+    const { isToggle, newInput } = this.state; 
     return (
         <div style={{marginBottom: '10px'}}>
             {  isToggle ? <input 
-                            value={todo} 
-                            onChange={this.taskListHandleEdit} 
+                            value={newInput} 
+                            onChange={this.taskListHandleEdit.bind(this)} 
                             name="newInput"
                             /> 
                             : todo } 
-            <button style={{marginLeft: '5px', marginRight: '5px'}}>Edit</button>
+            <button onClick={() => this.taskListHandleToggle(id)} style={{marginLeft: '5px', marginRight: '5px'}}>Edit</button>
             <button onClick={() => this.taskListHandleDeleteByID(id)}>Delete</button>
         </div>
     )

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import uuidV4 from 'uuid/v4';
 
+import Nav from './Components/Nav';
 import './App.css';
+
 
 import Task from './Components/Task';
 
@@ -21,7 +23,9 @@ class App extends Component {
         id: uuidV4(),
         todo: 'Walk the dog'
       }
-    ]
+    ],
+    isAuth: false,
+    password: '123'
   }
 
   handleSubmit = (value) => {
@@ -38,26 +42,41 @@ class App extends Component {
   }
 
   handleDelete = (taskID) => {
-    
     let updated = [...this.state.list];
-
     let updatedTask = updated.filter(task => task.id !== taskID);
-
     this.setState({
       list: updatedTask
     });
+  }
+
+  handleEditInputUpdate = (id, newInput) => {
+    console.log('TRIGGERD')
+    let updated = [...this.state.list];
+
+    updated.map(task => (task.id === id ? task.todo = newInput : task))
+
+    this.setState({
+      list: updated
+    })
 
   }
+
 
   render() {
 
     return (
       <div className="App">
-        <Task 
-          {...this.state}
-          appHandleSubmit={this.handleSubmit}
-          appHandleDeleteByID={this.handleDelete}
-        />
+        <Nav />
+        {
+          this.state.isAuth ? (
+            <Task 
+              {...this.state}
+              appHandleSubmit={this.handleSubmit}
+              appHandleDeleteByID={this.handleDelete}
+              appHandleEditInputUpdate={this.handleEditInputUpdate}
+            />
+          ) : 'Please sign up to use the best Todo Manager System!'
+        }
       </div>
     )
   }
