@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import uuidV4 from 'uuid/v4';
+import axios from 'axios';
 
 import Nav from './Components/Nav';
 import './App.css';
+
 
 
 import Task from './Components/Task';
@@ -10,24 +12,28 @@ import Task from './Components/Task';
 class App extends Component {
 
   state = {
-    list : [
-      {
-        id: uuidV4(),
-        todo: 'Buy Milk'
-      }, 
-      {
-        id: uuidV4(),
-        todo: 'Pick up mail'
-      },
-      {
-        id: uuidV4(),
-        todo: 'Walk the dog'
-      }
-    ],
-    isAuth: false,
+    list : [],
+    isAuth: true,
     password: '123',
     message: 'Please sign up to use the best Todo Manager System!',
     user: null
+  }
+
+  componentDidMount() {
+
+    // axios.get('http://localhost:3001')
+    //      .then( result => {
+    //       console.log(result);
+          
+    //       this.setState({
+    //         list: result.data
+    //       })
+
+    //      })
+    //      .catch( error => {
+    //       console.log(error)
+    //      })
+
   }
 
   handleSubmit = (value) => {
@@ -73,6 +79,21 @@ class App extends Component {
         isAuth: !this.state.isAuth,
         user: name
       })
+
+      
+      axios.get('http://localhost:3001')
+         .then( result => {
+          console.log(result);
+          
+          this.setState({
+            list: result.data
+          })
+
+         })
+         .catch( error => {
+          console.log(error)
+         })
+      
     } else {
       this.setState({
         message: 'Password does not match! Please check your password'
@@ -81,13 +102,24 @@ class App extends Component {
 
   }
 
+  logout = () => {
+    //console.log('85 logout');
+    this.setState({
+      user: null,
+      message: 'Please login to use the app',
+      isAuth: false
+    })
+  }
+
   render() {
 
+    
     return (
       <div className="App">
         <Nav 
           appAuthFunc={this.handleAuth}
           user={this.state.user}
+          appLogout={this.logout}
         />
         {
           this.state.isAuth ? (

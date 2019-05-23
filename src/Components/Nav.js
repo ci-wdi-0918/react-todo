@@ -29,6 +29,11 @@ export default class Nav extends Component {
 
   }
 
+  logout = () => {
+      //console.log('logged out is clicked');
+      this.props.appLogout();
+  }
+
   render() {
 
     let authForm = (
@@ -58,9 +63,11 @@ export default class Nav extends Component {
     let loggedUser = (
         <React.Fragment>
             <span>{this.props.user}</span>
-            <button>Log out</button>
+            <button onClick={this.logout}>Log out</button>
         </React.Fragment>
     )
+
+    
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

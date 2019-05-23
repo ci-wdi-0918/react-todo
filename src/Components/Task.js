@@ -6,7 +6,7 @@ class Task extends Component {
     state = {
         taskInput: ''
     }
-
+    
 
     showTaskList = () => {
         return this.props.list.map((task) => {
