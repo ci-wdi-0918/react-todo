@@ -8,6 +8,7 @@ class TaskList extends Component {
   }  
 
   taskListHandleDeleteByID = (id) => {
+     
       this.props.taskHandleDeleteByIDProps(id)
   }
 
@@ -17,8 +18,7 @@ class TaskList extends Component {
     this.setState({
         isToggle: !this.state.isToggle
     }, () => {
-        
-        
+    
         if (this.props.task.todo === this.state.newInput) {
             return;
         } else {
@@ -45,7 +45,7 @@ class TaskList extends Component {
   render() {
 
 
-    const { todo, id } = this.props.task;
+    const { todo, _id } = this.props.task;
     const { isToggle, newInput } = this.state; 
     return (
         <div style={{marginBottom: '10px'}}>
@@ -55,8 +55,8 @@ class TaskList extends Component {
                             name="newInput"
                             /> 
                             : todo } 
-            <button onClick={() => this.taskListHandleToggle(id)} style={{marginLeft: '5px', marginRight: '5px'}}>Edit</button>
-            <button onClick={() => this.taskListHandleDeleteByID(id)}>Delete</button>
+            <button onClick={() => this.taskListHandleToggle(_id)} style={{marginLeft: '5px', marginRight: '5px'}}>Edit</button>
+            <button onClick={() => this.taskListHandleDeleteByID(_id)}>Delete</button>
         </div>
     )
   }

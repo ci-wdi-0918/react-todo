@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import uuidV4 from 'uuid/v4';
 import axios from 'axios';
 
 import Nav from './Components/Nav';
@@ -13,60 +12,91 @@ class App extends Component {
 
   state = {
     list : [],
-    isAuth: true,
-    password: '123',
+    isAuth: false,
+    password: '1',
     message: 'Please sign up to use the best Todo Manager System!',
     user: null
   }
 
   componentDidMount() {
 
-    // axios.get('http://localhost:3001')
-    //      .then( result => {
-    //       console.log(result);
+    axios.get('http://localhost:3001/todo')
+         .then( result => {
           
-    //       this.setState({
-    //         list: result.data
-    //       })
+          this.setState({
+            list: result.data
+          })
 
-    //      })
-    //      .catch( error => {
-    //       console.log(error)
-    //      })
+         })
+         .catch( error => {
+          console.log(error)
+         })
 
   }
 
   handleSubmit = (value) => {
     let newTask = {
-      todo: value,
-      id: uuidV4()
+      todo: value
     }
-    let currentTaskObj = Object.assign([], this.state.list);
-    currentTaskObj.push(newTask);
 
-    this.setState({
-      list: currentTaskObj
-    })
+    axios.post('http://localhost:3001/todo/createtodo', newTask)
+         .then( todo => {
+
+
+            let currentTaskObj = Object.assign([], this.state.list);
+            currentTaskObj.push(todo.data);
+
+            this.setState({
+              list: currentTaskObj
+            })
+
+         })
+         .catch(error => {
+           console.log(error);
+         })
+
+
   }
 
   handleDelete = (taskID) => {
-    let updated = [...this.state.list];
-    let updatedTask = updated.filter(task => task.id !== taskID);
-    this.setState({
-      list: updatedTask
-    });
+
+  
+    axios.delete(`http://localhost:3001/todo/deletetodobyid?id=${taskID}`, { data: {
+      id: taskID
+    }})
+      .then( result => {
+        let updated = [...this.state.list];
+        let updatedTask = updated.filter(task => task._id !== taskID);
+        this.setState({
+          list: updatedTask
+        });
+      })
+      .catch( error => {
+        console.log(error)
+      })
   }
 
-  handleEditInputUpdate = (id, newInput) => {
-    console.log('TRIGGERD')
-    let updated = [...this.state.list];
+  handleEditInputUpdate = (id, newTodo) => {
+    console.log('TRIGGERD', id, newTodo)
 
-    updated.map(task => (task.id === id ? task.todo = newInput : task))
-
-    this.setState({
-      list: updated
+    axios.put('http://localhost:3001/todo/updatetodobyid',  {
+        id: id,
+        newTodo: newTodo
     })
+    .then(newTodo => {
+     
+      let updated = [...this.state.list];
+     
+      updated.map(task => (task._id === id ? task.todo = newTodo.data.todo : task))
+  
+      this.setState({
+        list: updated
+      })
 
+    })
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   handleAuth = (userInfo) => {
@@ -80,19 +110,18 @@ class App extends Component {
         user: name
       })
 
-      
-      axios.get('http://localhost:3001')
-         .then( result => {
-          console.log(result);
+      // axios.get('http://localhost:3001')
+      //    .then( result => {
+      //     console.log(result);
           
-          this.setState({
-            list: result.data
-          })
+      //     this.setState({
+      //       list: result.data
+      //     })
 
-         })
-         .catch( error => {
-          console.log(error)
-         })
+      //    })
+      //    .catch( error => {
+      //     console.log(error)
+      //    })
       
     } else {
       this.setState({

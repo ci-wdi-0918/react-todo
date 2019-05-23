@@ -6,13 +6,13 @@ class Task extends Component {
     state = {
         taskInput: ''
     }
-    
+
 
     showTaskList = () => {
         return this.props.list.map((task) => {
             return (
                 <TaskList 
-                    key={task.id}
+                    key={task._id}
                     task={task}
                     taskHandleDeleteByIDProps={this.taskHandleDeleteByID}
                     taskHandleEditInput={this.props.appHandleEditInputUpdate}
