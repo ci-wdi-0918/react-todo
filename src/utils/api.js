@@ -106,3 +106,25 @@ export const handleJWTExpirationApi = () => {
         }
     });
 }
+
+export const handleDeleteApi = (todoID) => {
+
+    return new Promise( (resolve, reject) => {
+
+        let token = localStorage.getItem('jwtToken');
+        let decoded = jwt_decode(token);
+
+        axios.delete(`http://localhost:3001/todo/deletetodobyid/${decoded.id}/${todoID}`)
+             .then( todo => {
+
+                resolve(todo.data.todos);
+
+             })
+             .catch( error => {
+                 reject(error);
+             })
+
+
+    });
+
+}

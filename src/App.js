@@ -9,7 +9,8 @@ import {
   handleSignUpAndLogInApi,
   handleGetAllTodoApi,
   handleJWTExpirationApi,
-  handleSubmitNewTask
+  handleSubmitNewTask,
+  handleDeleteApi
 } from './utils/api';
 
 import Task from './Components/Task';
@@ -78,20 +79,33 @@ class App extends Component {
 
   handleDelete = (taskID) => {
 
-  
-    axios.delete(`http://localhost:3001/todo/deletetodobyid?id=${taskID}`, { data: {
-      id: taskID
-    }})
-      .then( result => {
-        let updated = [...this.state.list];
-        let updatedTask = updated.filter(task => task._id !== taskID);
+    handleDeleteApi(taskID)
+      .then( newArray => {
+
+        console.log(newArray)
+
         this.setState({
-          list: updatedTask
-        });
+          list: newArray
+        })
       })
       .catch( error => {
-        console.log(error)
+        console.log(error);
       })
+
+
+    // axios.delete(`http://localhost:3001/todo/deletetodobyid?id=${taskID}`, { data: {
+    //   id: taskID
+    // }})
+    //   .then( result => {
+    //     let updated = [...this.state.list];
+    //     let updatedTask = updated.filter(task => task._id !== taskID);
+    //     this.setState({
+    //       list: updatedTask
+    //     });
+    //   })
+    //   .catch( error => {
+    //     console.log(error)
+    //   })
   }
 
   handleEditInputUpdate = (id, newTodo) => {
