@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class Nav extends Component {
 
   state = {
-      name: '',
+      email: '',
       password: ''
   }
   
@@ -22,7 +22,7 @@ export default class Nav extends Component {
       this.props.appAuthFunc(this.state);
 
       this.setState({
-          name: '',
+          email: '',
           password: ''
       })
   
@@ -41,11 +41,11 @@ export default class Nav extends Component {
             <input 
                 className="form-control mr-sm-2" 
                 type="text" 
-                name="name" 
-                placeholder="Name" 
-                aria-label="Name" 
+                name="email" 
+                placeholder="email" 
+                aria-label="email" 
                 onChange={this.navAuth}
-                value={this.state.name}
+                value={this.state.email}
                 />
             <input 
                 className="form-control mr-sm-2" 
@@ -66,8 +66,6 @@ export default class Nav extends Component {
             <button onClick={this.logout}>Log out</button>
         </React.Fragment>
     )
-
-    
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

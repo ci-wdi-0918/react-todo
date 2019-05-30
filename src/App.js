@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 
 import Nav from './Components/Nav';
 import './App.css';
 
-
+import {
+  handleSignUpAndLogInApi,
+  handleGetAllTodoApi,
+  handleJWTExpirationApi,
+  handleSubmitNewTask
+} from './utils/api';
 
 import Task from './Components/Task';
 
@@ -20,42 +26,54 @@ class App extends Component {
 
   componentDidMount() {
 
-    axios.get('http://localhost:3001/todo')
-         .then( result => {
-          
-          this.setState({
-            list: result.data
+    handleJWTExpirationApi()
+      .then( token => {
+
+        let decoded = jwt_decode(token);
+
+        this.setState({
+          user: decoded.email,
+          isAuth: true
+        }, () => {
+
+          handleGetAllTodoApi()
+          .then( result => {
+
+            this.setState({
+              list: result.data.todos
+            })
+
           })
+          .catch( error => {
+            this.setState({
+              message: error.message,
+              user: null
+            })
+          }) 
 
-         })
-         .catch( error => {
-          console.log(error)
-         })
+        })
 
+      })
+      .catch( error => {
+        return;
+      })
+  
   }
 
   handleSubmit = (value) => {
-    let newTask = {
-      todo: value
-    }
+  
 
-    axios.post('http://localhost:3001/todo/createtodo', newTask)
-         .then( todo => {
+    handleSubmitNewTask(value, this.state.list)
+      .then( newTodoList => {
+        console.log(newTodoList)
+        this.setState({
+          list: newTodoList
+        })
 
-
-            let currentTaskObj = Object.assign([], this.state.list);
-            currentTaskObj.push(todo.data);
-
-            this.setState({
-              list: currentTaskObj
-            })
-
-         })
-         .catch(error => {
-           console.log(error);
-         })
-
-
+      })
+      .catch( error => {
+        console.log(error);
+      })
   }
 
   handleDelete = (taskID) => {
@@ -100,34 +118,39 @@ class App extends Component {
   }
 
   handleAuth = (userInfo) => {
-    //console.log('APP 65', userInfo);
+  
+    handleSignUpAndLogInApi(userInfo)
+      .then(decoded => {
 
-    const { name, password } = userInfo;
+        this.setState({
+          user: decoded.email,
+          isAuth: true
+        }, () => {
 
-    if(password === this.state.password) {
-      this.setState({
-        isAuth: !this.state.isAuth,
-        user: name
+          handleGetAllTodoApi()
+            .then( result => {
+
+              this.setState({
+                list: result.data.todos
+              })
+
+            })
+            .catch( error => {
+              this.setState({
+                message: error.message
+              })
+            }) 
+
+        });
+
+      })
+      .catch( error => {
+        this.setState({
+          message: error.message
+        })
       })
 
-      // axios.get('http://localhost:3001')
-      //    .then( result => {
-      //     console.log(result);
-          
-      //     this.setState({
-      //       list: result.data
-      //     })
 
-      //    })
-      //    .catch( error => {
-      //     console.log(error)
-      //    })
-      
-    } else {
-      this.setState({
-        message: 'Password does not match! Please check your password'
-      })
-    }
 
   }
 
